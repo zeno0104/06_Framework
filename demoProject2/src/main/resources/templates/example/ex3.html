@@ -1,37 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>타임리프 예제 3</title>
-  </head>
-  <body>
-    <h1>타임리프 예제 3</h1>
-    <h3>링크(url) 조합에 사용되는 Spring EL (@{})</h3>
-    <ul>
-      <!-- ⭐⭐⭐⭐⭐⭐⭐⭐ -->
-      <li><a href="/board">게시판(/board)</a></li>
-      <li><a href="/board?key=제목&query=검색어">게시판(/board)</a></li>
-      <!-- 타임리프를 이용한 쿼리스트링 작성법 -->
-      <li>
-        <a th:href="@{/board(key=${key}, query=${query})}">게시판(/board)</a>
-        <!-- /board?key=제목&query=검색어 -->
-      </li>
+<head>
+<meta charset="UTF-8" />
+<title>타임리프 예제 3</title>
+</head>
+<body>
+	<h1>타임리프 예제 3</h1>
+	<h3>링크(url) 조합에 사용되는 Spring EL (@{})</h3>
+	<ul>
+		<!-- ⭐⭐⭐⭐⭐⭐⭐⭐ -->
+		<li><a href="/board">게시판(/board)</a></li>
+		<li><a href="/board?key=제목&query=검색어">게시판(/board)</a></li>
+		<!-- 타임리프를 이용한 쿼리스트링 작성법 -->
+		<li><a th:href="@{/board(key=${key}, query=${query})}">게시판(/board)</a>
+			<!-- /board?key=제목&query=검색어 --></li>
 
-      <!-- 타임리프를 이용한 요청 주소 작성법 -->
-      <li>
-        <a th:href="@{/example/ex3/{number}(number=${boardNo})}"
-          >/example/ex3/10</a
-        >
-      </li>
-      <li>PathVariable : 주소 중 일부분을 변수값처럼 사용</li>
-      <ul>
-        <!-- 하는 일은 똑같은데, 1, 2, 3번에 대한 각각의 메서드를 만들어줄 필요가 없다.
+		<!-- 타임리프를 이용한 요청 주소 작성법 -->
+		<li><a th:href="@{/example/ex3/{number}(number=${boardNo})}">/example/ex3/10</a>
+		</li>
+		<li>PathVariable : 주소 중 일부분을 변수값처럼 사용</li>
+		<ul>
+			<!-- 하는 일은 똑같은데, 1, 2, 3번에 대한 각각의 메서드를 만들어줄 필요가 없다.
          => 이럴 때 사용하는게 PathVarible
         -->
-        <li><a href="/example/ex3/1">/example/ex3/1</a></li>
-        <li><a href="/example/ex3/2">/example/ex3/2</a></li>
-        <li><a href="/example/ex3/3">/example/ex3/3</a></li>
-      </ul>
-    </ul>
-  </body>
+			<li><a href="/example/ex3/1">/example/ex3/1</a></li>
+			<li><a href="/example/ex3/2">/example/ex3/2</a></li>
+			<li><a href="/example/ex3/3">/example/ex3/3</a></li>
+		</ul>
+	</ul>
+</body>
 </html>
