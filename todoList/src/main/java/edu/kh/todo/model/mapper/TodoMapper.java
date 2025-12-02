@@ -46,6 +46,8 @@ public interface TodoMapper {
 
 	int todoUpdate(Todo todo);
 
+	int getTotalCount();
+
 	// int addTodo(@Param("todoTitle") String todoTitle,@Param("todoContent") String
 	// todoContent);
 
