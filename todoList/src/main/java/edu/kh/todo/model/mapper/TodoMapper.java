@@ -25,6 +25,8 @@ import edu.kh.todo.model.dto.Todo;
 // 전체 흐름은 현재 DAO가 있다는 가정하에 다음과 같다
 // client -> service -> DAO -> Mapper -> xml 
 // 돌아오는 것은 반대로 돌아오면 된다.
+
+// @Mapper는 Mybatis에서 제공하는 어노테이션
 @Mapper
 public interface TodoMapper {
 
@@ -39,6 +41,10 @@ public interface TodoMapper {
 	Todo todoDetail(int todoNo);
 
 	int todoDelete(int todoNo);
+
+	int changeComplete(Todo todo);
+
+	int todoUpdate(Todo todo);
 
 	// int addTodo(@Param("todoTitle") String todoTitle,@Param("todoContent") String
 	// todoContent);

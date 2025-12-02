@@ -36,4 +36,10 @@ public interface TodoService {
 
 
 	int todoDelete(int todoNo);
+
+	int changeComplete(Todo todo);
+
+	int todoUpdate(Todo todo);
+
+
 }
