@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.kh.todo.model.dto.Todo;
@@ -119,4 +122,32 @@ public class AjaxController {
 		// HTTPMessageConveter가 알맞은 형태로 변환해줌
 	}
 
+	// 할 일 상세 조회
+	@ResponseBody
+	@GetMapping("detail")
+	public Todo selectTodo(@RequestParam("todoNo") int todoNo) {
+		return service.todoDetail(todoNo);
+	}
+
+	@ResponseBody
+	@PostMapping("update")
+	public int updateTodo(@RequestBody Todo todo) {
+		// HTTPMessageConverter => json으로 바꿔줌
+		// js에게 전달
+		return service.todoUpdate(todo);
+	}
+
+	// 할 일 삭제 요청(DELETE)
+	@ResponseBody // 비동기 요청 보낸곳으로 응답 본문 리턴함
+	@DeleteMapping("delete") // /ajax/delete
+	public int todoDelete(@RequestBody int todoNo) {
+		return service.todoDelete(todoNo);
+	}
+
+	// 완료 여부 변경(PUT)
+	@ResponseBody
+	@PutMapping("changeComplete") // /ajax/changeComplete
+	public int changeComplete(@RequestBody Todo todo) {
+		return service.changeComplete(todo);
+	}
 }
