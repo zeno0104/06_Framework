@@ -30,7 +30,7 @@ public class ParameterController {
 	 */
 	@GetMapping("main")
 	public String paramMain() {
-
+1
 		// /param/main Get 방식 요청 매핑
 		// src/main/resources/templates/param/param-main.html로 forward
 		return "param/param-main";
@@ -139,7 +139,7 @@ public class ParameterController {
 	@PostMapping("test4")
 	public String paramTest4(/* @ModelAttribute */Member inputMember) {
 		// name값과 필드명이 같다면, setter가 자동으로 진행됌
-		// 또한, DTO(Member)는 기본생성자가 필요	
+		// 또한, DTO(Member)는 기본생성자가 필요
 		// Member inputMember = new Member(); => 내부적으로 자동으로 일어남
 		// 그리고, Setter가 진행되기 때문에, Setter 또한 정의되어 있어야 한다.
 
