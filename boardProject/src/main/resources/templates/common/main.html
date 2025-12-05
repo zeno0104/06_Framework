@@ -1,100 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>messages.properties 값 출력</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>messages.properties 값 출력</title>
 
-  <!-- templates/common/common.html 조각으로 추가 -->
+<!-- templates/common/common.html 조각으로 추가 -->
+<th:block th:replace="~{common/common}"></th:block>
 </head>
 <body>
 
-  <main>
+	<main>
 
-    <!-- common/header.html 을 조각으로 추가 -->
+		<!-- common/header.html 을 조각으로 추가 -->
+		<th:block th:replace="~{common/header}"></th:block>
+		<!-- 메인 페이지 내용  -->
+		<section class="content">
 
-    <!-- 메인 페이지 내용  -->
-    <section class="content">
-    
-      <section class="content-1">
-		<!-- 비동기 보충 시 사용 영역 -->
-	  </section>
+			<section class="content-1">
+				<!-- 비동기 보충 시 사용 영역 -->
+			</section>
 
-      <section class="content-2">
-        <!-- 로그인, 회원가입 버튼 -->
+			<section class="content-2">
+				<!-- 로그인, 회원가입 버튼 -->
 
-          <!-- 로그인이 되어있지 않은 경우 -->
-          
-            <!-- 로그인 박스 -->
-            <form action="/member/login" method="POST" id="loginForm">
-              <fieldset class="id-pw-area">
-    
-                <!-- 아이디/비밀번호 입력 -->
-                <section>
-                  <input type="text" 
-                        name="memberEmail"
-                        placeholder="이메일">
-    
-                  <input type="password" 
-                        name="memberPw" 
-                        placeholder="비밀번호">
-                </section>
-    
-                <!-- 로그인 버튼 -->
-                <section>
-                  <button>로그인</button>
-                </section>
-              </fieldset>
-    
-              <label>
-                <!-- label 태그 : input 태그의 제목을 나타내는 태그  -->
-                <input type="checkbox" name="saveId">
-                아이디 저장
-              </label>
-    
-              <article class="signup-find-area">
+				<!-- 로그인이 되어있지 않은 경우 -->
+				<!-- 로그인을 했을 때, redirect -> session scope에 실려있어야 함 -->
+				<th:block th:if="${session.loginMember == null}">
+					<!-- 로그인 박스 -->
+					<form action="/member/login" method="POST" id="loginForm">
+						<fieldset class="id-pw-area">
 
-                <a href="#">회원가입</a>
+							<!-- 아이디/비밀번호 입력 -->
+							<section>
+								<input type="text" name="memberEmail" placeholder="이메일">
 
-                <span> | </span>
-                <a href="#">ID/PW 찾기</a>
-              </article>
-    
-            </form>
+								<input type="password" name="memberPw" placeholder="비밀번호">
+							</section>
 
-          <!-- 로그인이 되어있는 경우 -->
-          
-            <article class="login-area">
+							<!-- 로그인 버튼 -->
+							<section>
+								<button>로그인</button>
+							</section>
+						</fieldset>
 
-              <a href="#">
-                <!-- 프로필 이미지 -->
-                <img src="/images/user.png"
-                     id="memberProfile"
-                     alt="프로필 이미지" >
-              </a>
+						<label> <!-- label 태그 : input 태그의 제목을 나타내는 태그  --> <input
+							type="checkbox" name="saveId"> 아이디 저장
+						</label>
 
-              <!-- 닉네임, 이메일, 로그아웃 버튼 영역 -->
-              <div class="my-info">
-                
-                <div>
-                  <a href="#" id="nickname">닉네임</a>
-                  <a href="#" id="logoutBtn">로그아웃</a>
-                </div>
+						<article class="signup-find-area">
 
-                <p>이메일</p>
+							<a href="#">회원가입</a> <span> | </span> <a href="#">ID/PW 찾기</a>
+						</article>
 
-              </div>
+					</form>
+				</th:block>
 
-            </article>
-          
+				<!-- 로그인이 되어있는 경우 -->
+				<!-- unless => 조건식이 false일 때 -->
+				<th:block th:unless="${session.loginMember == null}">
+					<article class="login-area">
+						<a href="#"> <!-- 프로필 이미지 --> <img src="/images/user.png"
+							id="memberProfile" alt="프로필 이미지">
+						</a>
+						<!-- 닉네임, 이메일, 로그아웃 버튼 영역 -->
+						<div class="my-info">
+							<div>
+								<a href="#" id="nickname">닉네임</a> <a href="#" id="logoutBtn">로그아웃</a>
+							</div>
+							<p>이메일</p>
+						</div>
+					</article>
+				</th:block>
+			</section>
 
-      </section>
+		</section>
+	</main>
 
-    </section>
-  </main>
-
-  <!-- common/footer 추가-->
-
-  <!-- script 추가-->
+	<!-- common/footer 추가-->
+	<th:block th:replace="~{common/footer}"></th:block>
+	<!-- 	<script src="https://kit.fontawesome.com/c0777c617e.js"
+		crossorigin="anonymous"></script> -->
+	<!-- script 추가-->
 </body>
 </html>
