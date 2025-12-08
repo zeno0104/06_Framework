@@ -135,4 +135,15 @@ public class MemberController {
 		return service.checkEmail(memberEmail);
 	}
 
+	/**
+	 * 닉네임 중복 검사
+	 * 
+	 * @param memberNickname
+	 * @return 중복 1, 아님 0
+	 */
+	@ResponseBody
+	@GetMapping("checkNickname")
+	public int checkNickname(@RequestParam("memberNickname") String memberNickname) {
+		return service.checkNickname(memberNickname);
+	}
 }

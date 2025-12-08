@@ -8,11 +8,11 @@
 // - false == 해당 항목은 유효하지 않은 형식으로 작성됨
 const checkObj = {
   memberEmail: false,
+  authKey: false,
   memberPw: false,
   memberPwConfirm: false,
   memberNickname: false,
   memberTel: false,
-  authKey: false,
 };
 
 // ---------------------------------
@@ -232,6 +232,26 @@ checkAuthKeyBtn.addEventListener("click", () => {
   };
 
   // 인증번호 확인용 비동기 요청(ajax) 보내기
+  fetch("/email/checkAuthkey", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(obj),
+  })
+    .then((resp) => resp.text())
+    .then((result) => {
+      if (result == 0) {
+        alert("인증번호가 일치하지 않습니다.");
+        checkObj.authKey = false;
+        return;
+      }
+      // 일치할 때
+      clearInterval(authTimer); // 타이머 멈춤
+
+      authKeyMessage.innerText = "인증 되었습니다";
+      authKeyMessage.classList.remove("error");
+      authKeyMessage.classList.add("confirm");
+      checkObj.authKey = true;
+    });
 });
 
 // -----------------------------------------------------
@@ -344,6 +364,23 @@ memberNickname.addEventListener("input", (e) => {
   }
 
   // 3) 중복 검사 ajax요청 (유효한 경우)
+  fetch("/member/checkNickname?memberNickname=" + inputNickname)
+    .then((resp) => resp.text())
+    .then((count) => {
+      if (count == 1) {
+        // 중복 O
+        nickMessage.innerText = "이미 사용중입니다.";
+        nickMessage.classList.add("error");
+        nickMessage.classList.remove("confirm");
+        checkObj.memberNickname = false;
+        return;
+      }
+      // 중복이 아닌 경우
+      nickMessage.innerText = "사용 가능한 닉네임입니다.";
+      nickMessage.classList.add("confirm");
+      nickMessage.classList.remove("error");
+      checkObj.memberNickname = true;
+    });
 });
 
 // --------------------------------------

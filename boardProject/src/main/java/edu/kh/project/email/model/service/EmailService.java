@@ -1,5 +1,7 @@
 package edu.kh.project.email.model.service;
 
+import java.util.Map;
+
 public interface EmailService {
 
 	/**
@@ -10,4 +12,10 @@ public interface EmailService {
 	 * @return
 	 */
 	String sendEmail(String type, String email);
+
+	/** 입력받은 이메일, 인증번호가 DB에 있는지 조회 서비스
+	 * @param map (email, authKey)
+	 * @return
+	 */
+	int checkAuthKey(Map<String, String> map);
 }

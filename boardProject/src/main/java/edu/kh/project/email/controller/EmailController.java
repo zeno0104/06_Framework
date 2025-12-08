@@ -1,5 +1,7 @@
 package edu.kh.project.email.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +29,17 @@ public class EmailController {
 		}
 		// 이메일 보내기 실패
 		return 0;
+	}
+	
+	/** 입력받은 이메일, 인증번호가 DB에 있는지 조회
+	 * @param map : email, authKey
+	 * @return 
+	 */
+	@ResponseBody
+	@PostMapping("checkAuthkey")
+	public int checkAuthKey(@RequestBody Map<String, String> map) {
+		
+		return service.checkAuthKey(map);
 	}
 
 }
