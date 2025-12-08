@@ -1,86 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>messages.properties 값 출력</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>messages.properties 값 출력</title>
 
-<!-- templates/common/common.html 조각으로 추가 -->
-<th:block th:replace="~{common/common}"></th:block>
+  <!-- templates/common/common.html 조각으로 추가 -->
+  <th:block th:replace="~{common/common}"></th:block>
 </head>
 <body>
 
-	<main>
+  <main>
 
-		<!-- common/header.html 을 조각으로 추가 -->
-		<th:block th:replace="~{common/header}"></th:block>
-		<!-- 메인 페이지 내용  -->
-		<section class="content">
+    <!-- common/header.html 을 조각으로 추가 -->
+    <th:block th:replace="~{common/header}"></th:block>
 
-			<section class="content-1">
-				<!-- 비동기 보충 시 사용 영역 -->
-			</section>
+    <!-- 메인 페이지 내용  -->
+    <section class="content">
+    
+      <section class="content-1">
+		<!-- 비동기 보충 시 사용 영역 -->
+	  </section>
 
-			<section class="content-2">
-				<!-- 로그인, 회원가입 버튼 -->
+      <section class="content-2">
+        <!-- 로그인, 회원가입 버튼 -->
 
-				<!-- 로그인이 되어있지 않은 경우 -->
-				<!-- 로그인을 했을 때, redirect -> session scope에 실려있어야 함 -->
-				<th:block th:if="${session.loginMember == null}">
-					<!-- 로그인 박스 -->
-					<form action="/member/login" method="POST" id="loginForm">
-						<fieldset class="id-pw-area">
+          <!-- 로그인이 되어있지 않은 경우 -->
+          <th:block th:if="${session.loginMember == null}">
+          
+            <!-- 로그인 박스 -->
+            <form action="/member/login" method="POST" id="loginForm">
+              <fieldset class="id-pw-area">
+    
+                <!-- 아이디/비밀번호 입력 -->
+                <section>
+                  <input type="text" 
+                        name="memberEmail"
+                        placeholder="이메일">
+    
+                  <input type="password" 
+                        name="memberPw" 
+                        placeholder="비밀번호">
+                </section>
+    
+                <!-- 로그인 버튼 -->
+                <section>
+                  <button>로그인</button>
+                </section>
+              </fieldset>
+    
+              <label>
+                <!-- label 태그 : input 태그의 제목을 나타내는 태그  -->
+                <input type="checkbox" name="saveId">
+                아이디 저장
+              </label>
+    
+              <article class="signup-find-area">
 
-							<!-- 아이디/비밀번호 입력 -->
-							<section>
-								<input type="text" name="memberEmail" placeholder="이메일">
+                <a href="/member/signup">회원가입</a>
 
-								<input type="password" name="memberPw" placeholder="비밀번호">
-							</section>
+                <span> | </span>
+                <a href="#">ID/PW 찾기</a>
+              </article>
+    
+            </form>
+          </th:block>
 
-							<!-- 로그인 버튼 -->
-							<section>
-								<button>로그인</button>
-							</section>
-						</fieldset>
+          <!-- 로그인이 되어있는 경우 -->
+          <!--<th:block th:unless="${session.loginMember == null}"></th:block> -->
+          <th:block th:if="${session.loginMember != null}">
+            <article class="login-area">
 
-						<label> <!-- label 태그 : input 태그의 제목을 나타내는 태그  --> <input
-							type="checkbox" name="saveId"> 아이디 저장
-						</label>
+              <a href="#">
+                <!-- 프로필 이미지 -->
+                <!--
+                messages.properties 에 작성된 기본 사용자 이미지 사용
+                -> session.loginMember.profileImg에 유저가 등록한 
+                  이미지 경로가 있다면 (== null이 아니라면)
+                  session.loginMember.profileImg에 저장된 경로를 사용하겠다
+                -> 없다면 (== null 이라면) 
+                  /images/user.png(messages.properties에 
+                  user.default.image 등록) 사용
+                 -->
+                <img th:with="user=#{user.default.image}"
+                th:src="${session.loginMember.profileImg ?: user}"
+                     id="memberProfile"
+                     alt="프로필 이미지" >
+              </a>
 
-						<article class="signup-find-area">
+              <!-- 닉네임, 이메일, 로그아웃 버튼 영역 -->
+              <div class="my-info" th:object="${session.loginMember}">
+                
+                <div>
+                  <a href="#" id="nickname" th:text="*{memberNickname}">닉네임</a>
+                  <a href="/member/logout" id="logoutBtn">로그아웃</a>
+                </div>
 
-							<a href="#">회원가입</a> <span> | </span> <a href="#">ID/PW 찾기</a>
-						</article>
+                <p th:text="*{memberEmail}">이메일</p>
 
-					</form>
-				</th:block>
+              </div>
 
-				<!-- 로그인이 되어있는 경우 -->
-				<!-- unless => 조건식이 false일 때 -->
-				<th:block th:unless="${session.loginMember == null}">
-					<article class="login-area">
-						<a href="#"> <!-- 프로필 이미지 --> <img src="/images/user.png"
-							id="memberProfile" alt="프로필 이미지">
-						</a>
-						<!-- 닉네임, 이메일, 로그아웃 버튼 영역 -->
-						<div class="my-info">
-							<div>
-								<a href="#" id="nickname">닉네임</a> <a href="#" id="logoutBtn">로그아웃</a>
-							</div>
-							<p>이메일</p>
-						</div>
-					</article>
-				</th:block>
-			</section>
+            </article>
+          </th:block>
 
-		</section>
-	</main>
+      </section>
 
-	<!-- common/footer 추가-->
-	<th:block th:replace="~{common/footer}"></th:block>
-	<!-- 	<script src="https://kit.fontawesome.com/c0777c617e.js"
-		crossorigin="anonymous"></script> -->
-	<!-- script 추가-->
+    </section>
+  </main>
+
+  <!-- common/footer 추가-->
+  <th:block th:replace="~{common/footer}"></th:block>
+
+  <!-- script 추가-->
+  <script src="/js/main.js"></script>
 </body>
 </html>

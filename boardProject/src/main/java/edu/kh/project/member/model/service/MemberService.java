@@ -10,4 +10,11 @@ public interface MemberService {
 	 */
 	Member login(Member inputMember) throws Exception;
 
+
+
+	/** 이메일 중복검사 서비스
+	 * @return
+	 */
+	int checkEmail(String memberEmail);
+
 }
