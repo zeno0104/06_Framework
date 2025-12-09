@@ -54,14 +54,7 @@ public class MyPageServiceImpl implements MyPageService {
 		String pw = bcrypt.encode(newPw);
 		currMember.setMemberPw(pw);
 
-		int result = mapper.updatePw(currMember);
-
-		if (result == 0) {
-			return 0;
-		}
-
-		loginMember.setMemberPw(pw);
-		return result;
+		return mapper.updatePw(currMember);
 	}
 
 }
