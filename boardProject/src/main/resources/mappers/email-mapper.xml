@@ -21,7 +21,8 @@
 
 	<select id="checkAuthKey" resultType="_int">
 		SELECT COUNT(*)
-		FROM TB_AUTH_KEY
+		FROM
+		TB_AUTH_KEY
 		WHERE EMAIL = #{email}
 		AND AUTH_KEY = #{authKey}
 	</select>

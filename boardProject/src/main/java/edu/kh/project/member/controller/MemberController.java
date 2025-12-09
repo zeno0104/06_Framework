@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -146,4 +147,54 @@ public class MemberController {
 	public int checkNickname(@RequestParam("memberNickname") String memberNickname) {
 		return service.checkNickname(memberNickname);
 	}
+
+	/**
+	 * 회원 가입
+	 * 
+	 * @param inputMember   : 커맨드 객체(입력된 회원 정보) memberEmail, memberPw,
+	 *                      memberNickname, memberTel (memberAddress도 우편번호는 수집했을 것,
+	 *                      하지만 필요는 없음)
+	 * @param memberAddress : 입력한 주소 input 3개의 값을 배열로 전달 [우편번호, 도로명/지번주소, 상세주소]
+	 * @param ra            : RedirectAttributes로 리다이렉트 시 1회성으로 req -> session ->
+	 *                      req로 전달되는 객체
+	 * @return
+	 */
+	@PostMapping("signup")
+	public String signup(Member inputMember, @RequestParam("memberAddress") String[] memberAddress,
+			RedirectAttributes ra) {
+
+		// form태그 형식의 post는 동기식이다.
+		// forward, redirect하는 방식
+
+		// 회원 가입 서비스 호출
+		int result = service.signup(inputMember, memberAddress);
+
+		String path = null;
+		String message = null;
+
+		if (result > 0) {
+			// 성공시
+			message = inputMember.getMemberNickname() + "님의 가입을 환영합니다!";
+			path = "/";
+		} else {
+			// 실패시
+			message = "회원가입 실패...";
+			path = "signup";
+		}
+		ra.addFlashAttribute("message", message);
+
+		return "redirect:" + path;
+		// 성공시 -> redirect:/ (메인페이지 재요청)
+		// 실패시 -> redirect:signup (상대경로)
+		// 현재주소 : /member/signup
+		// 목표경로 : /member/signup (Get 방식 요청)
+
+		// @GetMapping("signup")
+		// public String signUp() {
+		// return "member/signup";
+		// }
+		// 위 GetMapping으로 이동하게 된다.
+	}
+	
+	
 }

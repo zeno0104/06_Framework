@@ -26,4 +26,11 @@ public interface MemberService {
 	 * @return
 	 */
 	int checkNickname(String memberNickname);
+
+	/** 회원가입 서비스
+	 * @param inputMember
+	 * @param memberAddress
+	 * @return
+	 */
+	int signup(Member inputMember, String[] memberAddress);
 }
