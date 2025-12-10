@@ -17,8 +17,12 @@ public interface MyPageMapper {
 	 */
 	int updateInfo(Member inputMember);
 
-
+	// 추후 수정
 	Member getCurrMember(Member loginMember);
 
 	int updatePw(Member currMember);
+
+	String selectPw(int memberNo);
+
+	int secession(int memberNo);
 }

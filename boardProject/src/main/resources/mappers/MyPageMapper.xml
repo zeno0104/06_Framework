@@ -11,16 +11,28 @@
 		MEMBER_ADDRESS = #{memberAddress}
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
-	
+	<!-- getCurrMember 해당 코드 추후 수정 -> selectPw로 -->
 	<select id="getCurrMember">
 		SELECT *
 		FROM MEMBER
 		WHERE MEMBER_NO = #{memberNo}
 	</select>
 	
+	<select id="selectPw" resultType="string">
+	    SELECT MEMBER_PW
+	    FROM MEMBER
+	    WHERE MEMBER_NO = #{memberNo}
+	</select>
+
 	<update id="updatePw">
 		UPDATE MEMBER
 		SET MEMBER_PW = #{memberPw}
+		WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<update id="secession">
+		UPDATE MEMBER
+		SET MEMBER_DEL_FL = 'Y'
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 </mapper>
