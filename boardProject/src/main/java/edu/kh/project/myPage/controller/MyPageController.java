@@ -1,6 +1,6 @@
 package edu.kh.project.myPage.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dto.Member;
+import edu.kh.project.myPage.model.dto.UploadFile;
 import edu.kh.project.myPage.model.service.MyPageService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,8 +116,17 @@ public class MyPageController {
 	}
 
 	// 파일 목록 조회 화면 이동
-	@GetMapping("fileList")
-	public String fileList() {
+	@GetMapping("fileList") //
+	public String fileList(@SessionAttribute("loginMember") Member loginMember, Model model) {
+
+		// 파일 목록 조회 서비스 호출(현재 로그인한 회원이 올린 이미지만)
+		int memberNo = loginMember.getMemberNo();
+
+		List<UploadFile> list = service.fileList(memberNo);
+
+		// model에 list 담아서 forward
+		model.addAttribute("list", list);
+
 		return "myPage/myPage-fileList";
 	}
 
@@ -250,5 +260,79 @@ public class MyPageController {
 		}
 
 		return "redirect:/myPage/fileTest";
+	}
+
+	@PostMapping("file/test2") // /myPage/file/test1 POST 요청 매핑
+	public String fileUpload2(@RequestParam("uploadFile") MultipartFile uploadFile,
+			@SessionAttribute("loginMember") Member loginMember, RedirectAttributes ra) {
+		try {
+			int memberNo = loginMember.getMemberNo();
+			int result = service.fileUpload2(uploadFile, memberNo);
+
+			String message = null;
+
+			if (result > 0) {
+				message = "파일 업로드 성공";
+			} else {
+				message = "파일 업로드 실패";
+			}
+
+			ra.addFlashAttribute("message", message);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/myPage/fileTest";
+
+	}
+
+	@PostMapping("file/test3")
+	public String fileUpload3(@RequestParam("aaa") List<MultipartFile> aaaList,
+			@RequestParam("bbb") List<MultipartFile> bbbList, @SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra) throws Exception {
+		// aaa 파일 미제출 시
+		// 0번, 1번 인덱스로 구성되어있음 - 파일은 모두 비어있음
+
+		// log.info("aaaList = " + aaaList); // [요소, 요소]
+
+		// bbb(multiple) 파일 미제출 시
+		// 0번 인덱스로 구성 - 파일이 비어있음
+		// log.info("bbbList = " + bbbList); // [요소]
+
+		// 여러 파일 업로드 할 수 있는 서비스 호출할 것
+		int result = service.fileUpload3(aaaList, bbbList, loginMember.getMemberNo());
+
+		// result == aaaList와 bbbList에 업로드된 파일 갯수
+
+		String message = null;
+
+		if (result == 0) {
+			message = "업로드된 파일이 없습니다";
+		} else {
+			message = result + "개의 파일이 업로드 되었습니다!";
+		}
+
+		ra.addFlashAttribute("message", message);
+
+		return "redirect:/myPage/fileTest";
+	}
+
+	@PostMapping("profile") // /myPage/profile POST 요청 매핑
+	public String profile(@RequestParam("profileImg") MultipartFile profileImg, RedirectAttributes ra,
+			@SessionAttribute("loginMember") Member loginMember) throws Exception {
+
+		// 서비스 호출
+		int result = service.profile(profileImg, loginMember);
+
+		String message = null;
+
+		if (result > 0) {
+			message = "변경 성공";
+		} else {
+			message = "변경 실패...";
+		}
+
+		ra.addFlashAttribute("message", message);
+		return "redirect:profile"; // 리다이렉트 - /myPage/profile GET 요청
 	}
 }
