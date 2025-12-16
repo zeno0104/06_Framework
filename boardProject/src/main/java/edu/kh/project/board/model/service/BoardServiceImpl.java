@@ -37,33 +37,33 @@ public class BoardServiceImpl implements BoardService {
 	public Map<String, Object> selectBoardList(int boardCode, int cp) {
 		// 1. 지정된 게시판에서(boardCode)에서
 		// 삭제되지 않은 게시글 수를 조회
-		
+
 		int listCount = mapper.getListCount(boardCode);
-		
-		// 2. 1번의 결과 + cp를 이용해서 
+
+		// 2. 1번의 결과 + cp를 이용해서
 		// Pagination 객체를 생성
 		// * Pagination 객체 : 게시글 목록 구성에 필요한 값을 저장한 객체
 		Pagination pagination = new Pagination(cp, listCount);
-		
+
 		// List, Pagination 객체를 넘겨야 하므로, return 타입이 Map
-		
+
 		// 3. 특정 게시판의 지정된 페이지 목록 조회
 		// -> board가 담긴 리스트를 가져오겠다는 의미
-		/* ROWBOUNDS 객체 (MyBatis가 제공해주는 객체)
-		 * - 지정된 크기만큼 건너 뛰고(offset)
-		 * 제한된 크기만큼(limit)의 행을 조회하는 객체
+		/*
+		 * ROWBOUNDS 객체 (MyBatis가 제공해주는 객체) - 지정된 크기만큼 건너 뛰고(offset) 제한된 크기만큼(limit)의 행을
+		 * 조회하는 객체
 		 * 
 		 * --> 페이징 처리가 간단해짐
 		 * 
 		 */
-		
+
 		int limit = pagination.getLimit(); // 10개
 		int offset = (cp - 1) * limit;
 		// offset만큼 건너 뛰고 가져오겠다는 의미
-		// 만약 2페이지라면 -> (2 - 1) * 10 -> 10
+		// 만약 현재 2페이지라면 -> (2 - 1) * 10 -> 10
 		// -> 10개 건너 뛰고 가져오겠다는 의미
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
+
 		// Mapper 메서드 호출 시 원래 전달할 수 있는 매개변수 1개
 		// -> 2개를 전달할 수 있는 경우가 있음
 		// RowBounds를 이용할 떄
@@ -72,13 +72,65 @@ public class BoardServiceImpl implements BoardService {
 		List<Board> boardList = mapper.selectBoardList(boardCode, rowBounds);
 		// rowbounds는 mybatis가 자동으로 알아서 처리해줄 것임
 		// => 즉, sql 구문에 따로 작성할게 없다
-		
+
 		// 4. Pagination 객체 + 목록 조회 결과를 Map으로 묶음
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
 		map.put("boardList", boardList);
-		
+
 		// 5. map 반환
 		return map;
+	}
+
+	@Override
+	public Map<String, Object> searchList(Map<String, Object> paramMap, int cp) {
+		// 1. 지정된 게시판(boardCode)에서
+		// 검색 조건에 맞으면서
+		// 삭제되지 않은 게시글 수를 조회
+		
+		int listCount = mapper.getSearchCount(paramMap);
+		
+		// 2. 1번의 결과 + cp를 이용해서
+		// Pagination 객체 생성
+		Pagination pagination = new Pagination(cp, listCount);
+		
+		// 3. 특정 게시판의 지정된 페이지 목록 조회 (검색 포함)
+		int limit = pagination.getLimit();
+		int offset = (cp - 1) * limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<Board> boardList = mapper.selectSearchList(paramMap, rowBounds);
+		
+		// 4. 검색 목록 조회 결과 + Pagination 객체를 Map으로 묶음
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("boardList", boardList);
+		
+		return map;
+	}
+
+	// 게시글 상세 조회
+	@Override
+	public Board selectOne(Map<String, Integer> map) {
+		// 여러 SQL을 실행하는 방법
+		// 1. 하나의 Service 메서드에서 여러 mapper 메서드를 호출하는 방법
+		// 1. BOARD 조회
+		// mapper.selectBoard();
+		
+		// 2. BOARD_IMG 조회
+		// mapper.selectBoardImg();
+		
+		// 3. COMMENT 조회
+		// mapper.selectComment();
+		
+		
+		// 2. 수행하려는 SQL이
+		// 1) 모두 SELECT 이면서
+		// 2) 먼저 조회된 결과 중 일부를 이용해서
+		//    나중에 수행되는 SQL의 조건으로 삼을 수 있는 경우
+		// -> MyBatis의 <resultMap>, <collection> 태그를 이용해서
+		// Mapper 메서드 1회 호출만으로 여러 SELECT 한 번에 수행 가능
+		return mapper.selectOne(map);
 	}
 }

@@ -71,32 +71,57 @@
 
 
 
-            <!-- ====================== 이미지가 있을 경우 출력하는 구문  ====================== -->
-           
+            <!-- ====================== ⭐⭐⭐이미지가 있을 경우 출력하는 구문⭐⭐⭐  ====================== -->           
             <th:block th:if="${ #lists.size(board.imageList) > 0}">
 
-                <!-- 썸네일이 있을 경우 -->
+                <!-- 
+                    [썸네일 이미지 출력하는 구문]
+                    썸네일이 있을 경우에만 수행
+                -->
                 <th:block th:if="*{thumbnail}">
                     <h5>썸네일</h5>
                     <div class="img-box">
                         <div class="boardImg thumbnail">
                             <img th:src="|${thumbnail.imgPath}${thumbnail.imgRename}|">                     
-                            
+                            <!-- imgPath = /images/board/, imgRename = test1.jpg
+                            /images/board/test1.jpg 
+                            -->
                             <a th:href="|${thumbnail.imgPath}${thumbnail.imgRename}|"
                                 th:download="${thumbnail.imgOriginalName}">다운로드</a>         
                         </div>
                     </div>
                 </th:block>
                 
+                <!-- 
+                    [일반 이미지 출력하는 구문]
+                    전제
+                    - 썸네일 있다면 start = 1 (controller에서 req에 세팅)
+                    - 썸네일 없다면 start = 0
+                -->
                 <th:block th:if="${#lists.size(board.imageList) > start}">
-
-                    <h5>업로드 이미지</h5>  
+                    <!-- 위 조건식에서 true가 나오려면
+                        - 썸네일 있을 때(start가 1)는 이미지 갯수가 2개 이상이어야함
+                        (썸네일 1개 + 일반이미지 1개)
+                        - 썸네일 없을 때(start가 0)는 이미지 갯수가 1개 이상이어야함
+                        (썸네일 X + 일반이미지 1개)
+                        
+                        썸네일 유무와 관계없이 일반이미지가 1개라도 있어야
+                        일반이미지 출력하는 구문이 수행될 수 있다는 조건식임
+                    -->
+                        
+                    <h5>업로드 이미지</h5> <!-- 일반 이미지 출력하는 부분임을 기억하기 -->  
                     <th:block th:each="i : ${#numbers.sequence(start, #lists.size(board.imageList) - 1)}">                                
+                        <!-- th:each의 반복 대상(#numbers.sequence)의 설명.
+                            * 숫자 배열을 만드는 이유 : 
+                            imageList에 저장된 일반이미지를 몇 번 인덱스부터
+                            접근해야하는지 파악해야하기 때문!
+                            
+                            
+                        -->
                         <div class="img-box">
                             <div class="boardImg">
-
                                 <img th:src="|${board.imageList[i].imgPath}${board.imageList[i].imgRename}|">  
-
+                                <!-- board.imageList[0] ~ board.imageList[3] = 이런식으로 출력  -->
                                 <a th:href="|${board.imageList[i].imgPath}${board.imageList[i].imgRename}|"
                                     th:download="${board.imageList[i].imgOriginalName}"
                                 >다운로드</a>                
@@ -132,7 +157,6 @@
             </div>
 
         </section>
-
 
         <!-- 댓글 영역-->
         <th:block th:replace="~{board/comment}"></th:block>
