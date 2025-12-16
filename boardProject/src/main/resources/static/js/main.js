@@ -58,3 +58,94 @@ if (loginEmail != null) {
     document.querySelector("input[name='saveId']").checked = true;
   }
 }
+
+// ---------------------------------main content-1---------------------------------
+const selectMemberList = document.querySelector("#selectMemberList");
+const memberList = document.querySelector("#memberList");
+selectMemberList.addEventListener("click", () => {
+  fetch("/main/getAllUser")
+    .then((resp) => resp.json())
+    .then((result) => {
+      memberList.innerHTML = "";
+      for (let member of result) {
+        console.log(result);
+        let tr = document.createElement("tr");
+
+        let memberNo = document.createElement("td");
+        let memberEmail = document.createElement("td");
+        let memberNickname = document.createElement("td");
+        let memberDelFl = document.createElement("td");
+
+        memberNo.innerText = member.memberNo;
+        memberEmail.innerText = member.memberEmail;
+        memberNickname.innerText = member.memberNickname;
+        memberDelFl.innerText = member.memberDelFl;
+
+        tr.append(memberNo);
+        tr.append(memberEmail);
+        tr.append(memberNickname);
+        tr.append(memberDelFl);
+
+        memberList.append(tr);
+      }
+    });
+});
+
+const resetPw = document.querySelector("#resetPw");
+const resetMemberNo = document.querySelector("#resetMemberNo");
+const resetPwStatus = document.querySelector("#resetPwStatus");
+
+resetPw.addEventListener("click", (e) => {
+  if (resetMemberNo.value.trim() === "") {
+    alert("회원번호를 입력해주세요!");
+    return;
+  }
+  const memberNo = resetMemberNo.value;
+  fetch("/main/resetPw", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Number(memberNo)),
+  })
+    .then((resp) => resp.text())
+    .then((result) => {
+      if (result > 0) {
+        resetPwStatus.innerText = "비밀번호 초기화 성공!";
+        resetPwStatus.style.color = "green";
+      } else {
+        resetPwStatus.innerText = "비밀번호 초기화 실패..";
+        resetPwStatus.style.color = "red";
+      }
+      resetMemberNo.value = "";
+    });
+});
+
+const restorationMemberNo = document.querySelector("#restorationMemberNo");
+const restorationBtn = document.querySelector("#restorationBtn");
+const restorationStatus = document.querySelector("#restorationStatus");
+restorationBtn.addEventListener("click", () => {
+  if (restorationMemberNo.value.trim() === "") {
+    alert("회원번호를 입력해주세요!");
+    return;
+  }
+  const memberNo = Number(restorationMemberNo.value);
+  fetch("/main/restorationMember", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(memberNo),
+  })
+    .then((resp) => resp.text())
+    .then((result) => {
+      if (result > 0) {
+        restorationStatus.innerText = "탈퇴 복구 성공!";
+        restorationStatus.style.color = "green";
+      } else {
+        restorationStatus.innerText = "탈퇴 복구 실패..";
+        restorationStatus.style.color = "red";
+      }
+      restorationMemberNo.value = "";
+    });
+});
