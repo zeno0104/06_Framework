@@ -269,9 +269,6 @@ deleteBtn.addEventListener("click", () => {
     .then((result) => {
       if (result > 0) {
         alert("삭제 성공!");
-        // location.href = "/ajax/main";
-        // 질문 -> 이렇게 구현하면 안되는지??
-
         // 상세 조회 팝업 레이어 닫기
         popupLayer.classList.add("popup-hidden");
         // 전체, 완료된 할 일 갯수 다시 조회
