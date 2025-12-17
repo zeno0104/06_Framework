@@ -45,7 +45,7 @@ public class MemberController {
 	@PostMapping("login") // /member/login 요청 POST 방식 매핑
 	public String login(/* @ModelAttribute */ Member inputMember, RedirectAttributes ra, Model model,
 			@RequestParam(value = "saveId", required = false) String saveId, HttpServletResponse resp) {
-
+		// saveId = 아이디 저장
 		// 로그인 서비스 호출
 		try {
 			Member loginMember = service.login(inputMember);
@@ -82,12 +82,10 @@ public class MemberController {
 
 				} else { // 미체크 시
 					cookie.setMaxAge(0); // 0초 (클라이언트의 쿠키 삭제)
-
 				}
 
 				// 응답객체에 쿠키 추가 -> 클라이언트 전달
 				resp.addCookie(cookie);
-
 			}
 
 		} catch (Exception e) {

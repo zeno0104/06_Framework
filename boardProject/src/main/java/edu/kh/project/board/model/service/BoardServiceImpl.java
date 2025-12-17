@@ -87,26 +87,26 @@ public class BoardServiceImpl implements BoardService {
 		// 1. 지정된 게시판(boardCode)에서
 		// 검색 조건에 맞으면서
 		// 삭제되지 않은 게시글 수를 조회
-		
+
 		int listCount = mapper.getSearchCount(paramMap);
-		
+
 		// 2. 1번의 결과 + cp를 이용해서
 		// Pagination 객체 생성
 		Pagination pagination = new Pagination(cp, listCount);
-		
+
 		// 3. 특정 게시판의 지정된 페이지 목록 조회 (검색 포함)
 		int limit = pagination.getLimit();
 		int offset = (cp - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		
+
 		List<Board> boardList = mapper.selectSearchList(paramMap, rowBounds);
-		
+
 		// 4. 검색 목록 조회 결과 + Pagination 객체를 Map으로 묶음
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
 		map.put("boardList", boardList);
-		
+
 		return map;
 	}
 
@@ -117,20 +117,59 @@ public class BoardServiceImpl implements BoardService {
 		// 1. 하나의 Service 메서드에서 여러 mapper 메서드를 호출하는 방법
 		// 1. BOARD 조회
 		// mapper.selectBoard();
-		
+
 		// 2. BOARD_IMG 조회
 		// mapper.selectBoardImg();
-		
+
 		// 3. COMMENT 조회
 		// mapper.selectComment();
-		
-		
+
 		// 2. 수행하려는 SQL이
 		// 1) 모두 SELECT 이면서
 		// 2) 먼저 조회된 결과 중 일부를 이용해서
-		//    나중에 수행되는 SQL의 조건으로 삼을 수 있는 경우
+		// 나중에 수행되는 SQL의 조건으로 삼을 수 있는 경우
 		// -> MyBatis의 <resultMap>, <collection> 태그를 이용해서
 		// Mapper 메서드 1회 호출만으로 여러 SELECT 한 번에 수행 가능
 		return mapper.selectOne(map);
+	}
+
+	// 조회수 1 증가
+	@Override
+	public int updateReadCount(int boardNo) {
+		// 1. 조회수 1증가 (UPDATE)
+		int result = mapper.updateReadCount(boardNo);
+
+		// 2. 현재 조회 수 조회
+		if (result > 0) {
+			return mapper.selectReadCount(boardNo);
+		}
+
+		// UPDATE에 실패한 경우 -1 반환
+		return -1;
+	}
+
+	/**
+	 * map : boardNo, memberNo, likeCheck likeCheck : 좋아요 여부 1이면 누른 것, 0이면 안누른 것 =>
+	 * 이걸 토대로 insert or delete 여부 결정
+	 */
+	@Override
+	public int boardLike(Map<String, Integer> map) {
+		int result = 0;
+
+		if (map.get("likeCheck") == 1) {
+			// 1. 좋아요가 체크된 상태된 경우(likeCheck == 1)
+			// -> BOARD_LIKE 테이블에 DELETE
+			result = mapper.deleteBoardLike(map);
+		} else {
+			// 2. 좋아요가 해제된 상태인 경우(likeCheck == 0)
+			// -> BOARD_LIKE 테이블에 INSERT
+			result = mapper.insertBoardLike(map);
+		}
+		// 3. INSERT/DELETE 둘 중 성공했다면 해당 게시글의 좋아요 갯수 조회해서 반환
+		if(result > 0) {
+			return mapper.selectLikeCount(map.get("boardNo"));
+		}
+		
+		return -1;
 	}
 }

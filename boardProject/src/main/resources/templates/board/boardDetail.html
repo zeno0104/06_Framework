@@ -111,13 +111,29 @@
                         
                     <h5>업로드 이미지</h5> <!-- 일반 이미지 출력하는 부분임을 기억하기 -->  
                     <th:block th:each="i : ${#numbers.sequence(start, #lists.size(board.imageList) - 1)}">                                
-                        <!-- th:each의 반복 대상(#numbers.sequence)의 설명.
-                            * 숫자 배열을 만드는 이유 : 
-                            imageList에 저장된 일반이미지를 몇 번 인덱스부터
-                            접근해야하는지 파악해야하기 때문!
-                            
-                            
-                        -->
+                         <!-- th:each 의 반복 대상(#numbers.sequence)의 설명.
+                * 숫자 배열을 만드는 이유 : 
+                  imageList에 저장된 일반이미지를 몇 번 인덱스부터 
+                  접근해야하는지 파악해야하기 때문!
+
+              - 썸네일 있고, 일반이미지 4개 모두 있을 때(1, 5-1)로 배열 생성
+                -> (1,4) : 즉, [1,2,3,4] 배열 반환
+
+              - 썸네일 있고, 일반이미지 1개만 있을 때(1, 2-1)로 배열 생성
+                -> (1,1) : 즉, [1] 배열 반환
+
+              - 썸네일 없고, 일반이미지 4개 모두 있을 때(0, 4-1)로 배열 생성
+                -> (0,3) : 즉, [0,1,2,3] 배열 반환
+
+              - 썸네일 없고, 일반이미지 1개만 있을 때(0, 1-1)로 배열 생성
+                -> (0,0) : 즉, [0] 배열 반환
+
+              *** 결론 : 썸네일이 있을 때는 일반이미지는 
+                        iamgeList상 1번 인덱스부터 존재,
+
+                        썸네일이 없을 때는 일반이미지는 
+                        iamgeList상 0번 인덱스부터 존재함 ***
+              -->
                         <div class="img-box">
                             <div class="boardImg">
                                 <img th:src="|${board.imageList[i].imgPath}${board.imageList[i].imgRename}|">  
@@ -167,7 +183,9 @@
     <th:block th:replace="~{common/footer}"></th:block>
 
     <script th:inline="javascript">
-
+        // html상에서 타임리프 문법으로 작성한 것인데, 
+        // 변수를 아래와 같이 선언해두면 boardDetail.js 상에서 변수로 사용 가능
+        
         // - loginMember가 null 인 경우 null 반환
         const loginMemberNo = /*[[${session.loginMember?.memberNo}]]*/ "로그인 회원 번호";
 

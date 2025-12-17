@@ -1,5 +1,7 @@
 package edu.kh.project.board.controller;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -17,6 +22,9 @@ import edu.kh.project.board.model.dto.Board;
 import edu.kh.project.board.model.dto.BoardImg;
 import edu.kh.project.board.model.service.BoardService;
 import edu.kh.project.member.model.dto.Member;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -87,7 +95,10 @@ public class BoardController {
 	public String boardDetail(@PathVariable("boardCode") int boardCode, @PathVariable("boardNo") int boardNo,
 			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
 			@SessionAttribute(value = "loginMember", required = false) Member loginMember, Model model,
-			RedirectAttributes ra) {
+			RedirectAttributes ra, HttpServletRequest req, HttpServletResponse resp) {
+		// req : 요청에 담긴 쿠키 얻어오기
+		// resp : 쿠키 응답하기
+
 		// 게시글 상세 조회 서비스 호출
 		// loginMember는 좋아요를 로그인한 사람이 눌렀는지 확인하기 위해서 세션에서 가져옴
 		// value, required로 loginMember를 가져온 이유는
@@ -119,6 +130,85 @@ public class BoardController {
 			// 내가 현재 보고있는 게시판목록으로 재요청
 			ra.addFlashAttribute("message", "게시글이 존재하지 않습니다");
 		} else { // 조회 결과가 있는 경우
+
+			/* ------------------ 쿠키를 이용한 조회수 시작 ------------------ */
+			// 비회원 또는 로그인한 회원의 글이 아닌 경우 (== 글쓴이를 뺀 다른 사람) => 조회
+			if (loginMember == null || loginMember.getMemberNo() != board.getMemberNo()) {
+				Cookie[] cookies = req.getCookies();
+
+				Cookie c = null;
+
+				for (Cookie temp : cookies) {
+					// 쿠키 중에 "readBoardNo" 가 존재할 때
+					if (temp.getName().equals("readBoardNo")) {
+						c = temp;
+						break;
+					}
+				}
+
+				int result = 0; // 조회수 증가 결과를 저장할 변수
+
+				if (c == null) {
+					// "readBoardNo" 쿠키가 쿠키에 없을 때
+
+					// 새 쿠키 생성("readBoardNo", [2000][3000][1000] => [게시글번호])
+					// [2000] : boardNo
+					c = new Cookie("readBoardNo", "[" + boardNo + "]");
+					result = service.updateReadCount(boardNo);
+
+					if (result > 0) {
+						// 성공
+					} else {
+						// 실패
+					}
+
+				} else {
+					// "readBoardNo" 쿠키가 쿠키에 있을 때
+					// k : v
+					// readBoardNo : [2][30][400]
+
+					// 현재 글을 처음 읽는 경우
+					if (c.getValue().indexOf("[" + boardNo + "]") == -1) {
+						// indexOf가 -1이면 없는 경우
+						// 해당 글 쿠키에 누적 + 서비스 호출
+						// 즉, 현재 읽고있는 게시글을 처음 읽는 경우
+						c.setValue(c.getValue() + "[" + boardNo + "]");
+						// ex) [2][30][400][2000][4000]
+						result = service.updateReadCount(boardNo);
+						// 조회수 업데이트
+					}
+				}
+				// 조회수 증가 성공 / 조회 성공 시
+				if (result > 0) {
+					// 조회수 성공 및 조회수 가져왔을 때
+					// 앞서 조회했던 board의 readCount 값을
+					// 현재 가져온 result로 가져와서 다시 세팅해준다.
+					board.setReadCount(result);
+
+					// 쿠키 적용 경로 설정
+					// "/" 이하 경로 요청 시 쿠키를 서버로 전달
+					c.setPath("/");
+
+					// 쿠키 수명 지정
+					// 현재 시간을 얻어오기
+					LocalDateTime now = LocalDateTime.now();
+					// 다음날 자정 지정
+					LocalDateTime nextDayMidnight = now.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+					// 다음날 자정까지 남은 시간 계산 (초단위)
+					// Duration은 남은 시간을 계산
+					long secondsUntilNextDay = Duration.between(now, nextDayMidnight).getSeconds();
+					
+					// 쿠키 수명 설정
+					c.setMaxAge((int)secondsUntilNextDay);
+					
+					// 응답객체(resp)을 이용해서 클라이언트에게 전달
+					resp.addCookie(c);
+				}
+			}
+
+			/* ------------------ 쿠키를 이용한 조회수 끝 ------------------ */
+
 			path = "board/boardDetail";
 			// src/main/resources/tempaltes/board/boardDetail.html
 
@@ -135,11 +225,11 @@ public class BoardController {
 					thumbnail = board.getImageList().get(0);
 					// board.getImageList() -> List<BoardImg>
 				}
-				// thumbnail 변수에는 
+				// thumbnail 변수에는
 				// - 이미지 목록의 0번째 요소가 썸네일이면 썸네일 이미지의 BoardImg 객체
 				// - 썸네일이 아니라면 null
 				model.addAttribute("thumbnail", thumbnail);
-				
+
 				// start라는 key에 thumbnail이 null이 아닐 때 1 저장, null이면 0 저장
 				model.addAttribute("start", thumbnail != null ? 1 : 0);
 				// 썸네일 있을 때 : start=1
@@ -148,6 +238,18 @@ public class BoardController {
 			}
 		}
 		return path;
+	}
+	
+	/** 게시글 좋아요 체크/해제 (비동기)
+	 * @param map : boardNo, memberNo, likeCheck가 들어있는 map
+	 * @return
+	 */
+	@PostMapping("like")
+	@ResponseBody // /board/like (POST) 요청 매핑
+	public int boardLike(@RequestBody Map<String, Integer> map) {
+		// Board DTO로 받을 수도 있고, Map으로 받을 수 있다.
+		
+		return service.boardLike(map);
 	}
 
 }

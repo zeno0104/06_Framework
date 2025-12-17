@@ -260,4 +260,32 @@
 		AND BOARD_CODE = #{boardCode}
 		AND BOARD_NO = #{boardNo}
    </select>
+   <update id="updateReadCount">
+   		UPDATE "BOARD"
+   		SET READ_COUNT = READ_COUNT + 1
+   		WHERE BOARD_NO = #{boardNo}
+   </update>
+   <select id="selectReadCount">
+   		SELECT READ_COUNT
+   		FROM "BOARD"
+   		WHERE BOARD_NO = #{boardNo}   
+   </select>
+   <!-- 좋아요 해제 SQL (DELETE) -->
+   <delete id="deleteBoardLike">
+   		DELETE FROM "BOARD_LIKE"
+   		WHERE MEMBER_NO = #{memberNo}
+   		AND BOARD_NO = #{boardNo}
+   </delete>
+   <!-- 좋아요 체크 SQL (INSERT) -->
+   <insert id="insertBoardLike">
+   		INSERT INTO "BOARD_LIKE"
+   		VALUES(#{memberNo}, #{boardNo})
+   </insert>
+   <!-- 게시글 좋아요 갯수 조회 (SELECT) -->
+   <select id="selectLikeCount">
+   		SELECT COUNT(*)
+   		FROM "BOARD_LIKE"
+   		WHERE BOARD_NO = #{boardNo}
+   </select>
+   
 </mapper>
