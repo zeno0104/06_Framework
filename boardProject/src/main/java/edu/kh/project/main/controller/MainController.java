@@ -43,9 +43,7 @@ public class MainController {
 	@ResponseBody
 	@GetMapping("main/getAllUser")
 	public List<Member> getAllUser() {
-		List<Member> list = service.getAllUser();
-		
-		return list;
+		return service.getAllUser();
 	}
 	
 	@ResponseBody

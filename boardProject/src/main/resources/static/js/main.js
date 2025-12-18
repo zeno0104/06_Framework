@@ -62,7 +62,7 @@ if (loginEmail != null) {
 // ---------------------------------main content-1---------------------------------
 const selectMemberList = document.querySelector("#selectMemberList");
 const memberList = document.querySelector("#memberList");
-selectMemberList.addEventListener("click", () => {
+const getAllUser = () => {
   fetch("/main/getAllUser")
     .then((resp) => resp.json())
     .then((result) => {
@@ -89,7 +89,8 @@ selectMemberList.addEventListener("click", () => {
         memberList.append(tr);
       }
     });
-});
+};
+selectMemberList.addEventListener("click", getAllUser);
 
 const resetPw = document.querySelector("#resetPw");
 const resetMemberNo = document.querySelector("#resetMemberNo");
@@ -142,6 +143,7 @@ restorationBtn.addEventListener("click", () => {
       if (result > 0) {
         restorationStatus.innerText = "탈퇴 복구 성공!";
         restorationStatus.style.color = "green";
+        getAllUser();
       } else {
         restorationStatus.innerText = "탈퇴 복구 실패..";
         restorationStatus.style.color = "red";

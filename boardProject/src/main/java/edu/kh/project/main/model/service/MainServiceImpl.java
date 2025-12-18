@@ -47,7 +47,6 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public int restorationMember(int memberNo) {
 		Member member = mapper.getUser(memberNo);
-
 		if (member == null) {
 			return 0;
 		}
