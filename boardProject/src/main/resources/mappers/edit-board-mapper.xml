@@ -3,18 +3,10 @@
 <mapper
 	namespace="edu.kh.project.board.model.mapper.EditBoardMapper">
 
-	<!-- useGeneratedKeys 속성 : 
-		DB 내부적으로 생성한 키(시퀀스)를 전달된 파라미터의 필드로 대입 가능한지 여부를 
-		지정하는 속성 
-		-> 즉, selectKey를 사용할건지 안할건지 
-		
-		<selectKey> 태그 : INSERT/UPDATE 시 사용할 키(시퀀스)를 조회해서 
-		파라미터의 지정된 필드에 대입하는 역할의 태그 
-		
-		order 속성 : 메인 SQL이 수행되기 전/후에 selectKey가 수행되도록 지정 
-		전 : BEFORE / 후 : AFTER 
-		
-		keyProperty 속성 : selectKey의 조회 결과를 저장할 파라미터의 
+	<!-- useGeneratedKeys 속성 : DB 내부적으로 생성한 키(시퀀스)를 전달된 파라미터의 필드로 대입 가능한지 여부를 
+		지정하는 속성 -> 즉, selectKey를 사용할건지 안할건지 <selectKey> 태그 : INSERT/UPDATE 시 사용할 
+		키(시퀀스)를 조회해서 파라미터의 지정된 필드에 대입하는 역할의 태그 order 속성 : 메인 SQL이 수행되기 전/후에 selectKey가 
+		수행되도록 지정 전 : BEFORE / 후 : AFTER keyProperty 속성 : selectKey의 조회 결과를 저장할 파라미터의 
 		필드명을 작성 -->
 	<insert id="boardInsert" useGeneratedKeys="true"
 		parameterType="Board">
@@ -31,38 +23,61 @@
 		)
 		<!-- 시퀀스가 아닌, boardNo를 작성하면 된다! -->
 	</insert>
-	
-	<!-- 
- 		동적 SQL 중 <foreach>
- 		- Mybatis에서 제공하는 향상된 for문
- 		
- 		- 특정 SQL 구문을 반복할 때 사용
- 		
- 		- 반복 사이에 구분자(separator)를 추가할 수 있음
- 		
- 		[지원하는 속성]
- 		collection : 반복할 객체의 타입 작성(list, set, map...)
-		item : collection에서 순차적으로 꺼낸 하나의 요소를 저장하는 변수
-		index : 현재 반복 접근중인 인덱스 (0,1,2,3,4 ..)
-		
-		open : 반복 전에 출력할 sql
-		close : 반복 종료 후에 출력한 sql
-		
-		separator : 반복 사이사이 구분자 -> 
- 	-->
-	<insert id="insertUploadList" parameterType="list">
-	 	INSERT INTO "BOARD_IMG"
-	 		<foreach collection="list" item="img" separator=" UNION "
-	 			open="(" close=")"
-	 		>
-	 			SELECT NEXT_IMG_NO(), 
-	 			#{img.imgPath},
-	 			#{img.imgOriginalName},
-	 			#{img.imgRename},
-				#{img.imgOrder},
-				#{img.boardNo}
-				FROM DUAL
-	 		</foreach>
-	</insert>
 
+	<!-- 동적 SQL 중 <foreach> - Mybatis에서 제공하는 향상된 for문 - 특정 SQL 구문을 반복할 때 사용 
+		- 반복 사이에 구분자(separator)를 추가할 수 있음 [지원하는 속성] collection : 반복할 객체의 타입 작성(list, 
+		set, map...) item : collection에서 순차적으로 꺼낸 하나의 요소를 저장하는 변수 index : 현재 반복 접근중인 
+		인덱스 (0,1,2,3,4 ..) open : 반복 전에 출력할 sql close : 반복 종료 후에 출력한 sql separator 
+		: 반복 사이사이 구분자 -> -->
+	<insert id="insertUploadList" parameterType="list">
+		INSERT INTO "BOARD_IMG"
+		<foreach collection="list" item="img" separator=" UNION "
+			open="(" close=")">
+			SELECT NEXT_IMG_NO(),
+			#{img.imgPath},
+			#{img.imgOriginalName},
+			#{img.imgRename},
+			#{img.imgOrder},
+			#{img.boardNo}
+			FROM DUAL
+		</foreach>
+	</insert>
+	<!-- 게시글 부분 수정 (제목/내용) -->
+	<update id="boardUpdate">
+		UPDATE "BOARD"
+		SET BOARD_TITLE = #{boardTitle},
+		BOARD_CONTENT = #{boardContent}
+		WHERE BOARD_CODE = #{boardCode}
+		AND
+		BOARD_NO = #{boardNo}
+		AND MEMBER_NO = #{memberNo}
+	</update>
+	<!-- 게시글 이미지 삭제 #{} : 해당 컬럼 자료형에 맞는 리터럴 변환 '' ${} : sql에 값 그대로 추가 ('' 존재 
+		X) -->
+	<delete id="deleteImage">
+		DELETE FROM "BOARD_IMG"
+		WHERE IMG_ORDER IN (${deleteOrderList})
+		AND
+		BOARD_NO = #{boardNo}
+		<!-- 값 자체를 넣으려면 #{}이 아닌 ${} #{}는 '1,2' 이렇게 홑따옴표가 들어오고 ${}는 1,2 이렇게 값 자체가 
+			들어감 -->
+	</delete>
+	<update id="updateImage">
+		UPDATE "BOARD_IMG"
+		SET IMG_ORIGINAL_NAME = #{imgOriginalName},
+		IMG_RENAME = #{imgRename}
+		WHERE BOARD_NO = #{boardNo} AND IMG_ORDER = #{imgOrder}
+	</update>
+	<!-- 게시글 이미지 삽입 SQL (1행) -->
+	<insert id="insertImg">
+		INSERT INTO "BOARD_IMG"
+		VALUES(NEXT_IMG_NO(),
+		#{imgPath}, #{imgOriginalName}, #{imgRename}, #{imgOrder}, #{boardNo})
+	</insert>
+	
+	<update id="boardDelete">
+		UPDATE "BOARD"
+		SET BOARD_DEL_FL = 'Y'
+		WHERE BOARD_NO = #{boardNo} AND MEMBER_NO = #{memberNo}
+	</update>
 </mapper>
