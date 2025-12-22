@@ -198,10 +198,10 @@ public class BoardController {
 					// 다음날 자정까지 남은 시간 계산 (초단위)
 					// Duration은 남은 시간을 계산
 					long secondsUntilNextDay = Duration.between(now, nextDayMidnight).getSeconds();
-					
+
 					// 쿠키 수명 설정
-					c.setMaxAge((int)secondsUntilNextDay);
-					
+					c.setMaxAge((int) secondsUntilNextDay);
+
 					// 응답객체(resp)을 이용해서 클라이언트에게 전달
 					resp.addCookie(c);
 				}
@@ -239,8 +239,10 @@ public class BoardController {
 		}
 		return path;
 	}
-	
-	/** 게시글 좋아요 체크/해제 (비동기)
+
+	/**
+	 * 게시글 좋아요 체크/해제 (비동기)
+	 * 
 	 * @param map : boardNo, memberNo, likeCheck가 들어있는 map
 	 * @return
 	 */
@@ -248,7 +250,7 @@ public class BoardController {
 	@ResponseBody // /board/like (POST) 요청 매핑
 	public int boardLike(@RequestBody Map<String, Integer> map) {
 		// Board DTO로 받을 수도 있고, Map으로 받을 수 있다.
-		
+
 		return service.boardLike(map);
 	}
 

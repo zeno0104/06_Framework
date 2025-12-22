@@ -166,10 +166,19 @@ public class BoardServiceImpl implements BoardService {
 			result = mapper.insertBoardLike(map);
 		}
 		// 3. INSERT/DELETE 둘 중 성공했다면 해당 게시글의 좋아요 갯수 조회해서 반환
-		if(result > 0) {
+		if (result > 0) {
 			return mapper.selectLikeCount(map.get("boardNo"));
 		}
-		
+
 		return -1;
+	}
+
+	/**
+	 * DB 이미지 파일명 목록 조회 서비스
+	 */
+	@Override
+	public List<String> selectDbImageList() {
+		
+		return mapper.selectDbImageList();
 	}
 }

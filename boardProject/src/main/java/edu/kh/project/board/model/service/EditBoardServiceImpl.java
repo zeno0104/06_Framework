@@ -124,7 +124,7 @@ public class EditBoardServiceImpl implements EditBoardService {
 
 	// 게시글 수정 서비스
 	@Override
-	public int boardUpdate(Board inputBoard, List<MultipartFile> images, String deleteOrderList) throws Exception{
+	public int boardUpdate(Board inputBoard, List<MultipartFile> images, String deleteOrderList) throws Exception {
 		// 1. 게시글 부분(제목/내용) 수정
 		// 제목/내용 -> BOARD 테이블, BOARD_IMG 테이블
 		// 테이블이 다르기 때문에 따로따로 진행해야함
@@ -164,28 +164,28 @@ public class EditBoardServiceImpl implements EditBoardService {
 							.boardNo(inputBoard.getBoardNo()).imgOrder(i).uploadFile(images.get(i)).build();
 
 					uploadList.add(img);
-					
+
 					// 4. 업로드 하려는 이미지 정보(img) 이용해서
 					// 수정을 할지, 삽입을 할지 결정을 해야함
 					// 게시판에서 기존에 있는 사진에 다른 사진을 넣던지(수정), 아예 업로드 안됐던 곳에 사진을 업로드(삽입)
 					// 1) 기존에 이미지가 있었다면 -> 새 이미지로 변경 -> 수정
 					result = mapper.updateImage(img);
 					// 즉, BOARD_IMG에서 수정이 됐다면 1, 없다면 0
-					if(result == 0) {
+					if (result == 0) {
 						// 수정 실패 == 기존에 해당하는 순서(IMG_ORDER)에 이미지가 없었음
 						// -> 삽입 수행
-						
+
 						// 2) 기존에 존재하지 않으므로, 새 이미지 추가
-						
+
 						result = mapper.insertImg(img);
 					}
 				}
 				// 수정 또는 삽입이 실패한 경우
-				if(result == 0) {
+				if (result == 0) {
 					throw new RuntimeException(); // 롤백
 				}
 			}
-			if(uploadList.isEmpty()) {
+			if (uploadList.isEmpty()) {
 				// 선택한 파일이 없을 경우
 				// 즉, 클라이언트가 업로드한 이미지가 없을 경우
 				// 1) 제목, 내용만 수정한 경우
@@ -193,20 +193,20 @@ public class EditBoardServiceImpl implements EditBoardService {
 				return result;
 			}
 			// 수정, 새 이미지 파일을 서버에 저장
-			for(BoardImg img : uploadList) {
+			for (BoardImg img : uploadList) {
 				img.getUploadFile().transferTo(new File(folderPath + img.getImgRename()));
-				
+
 			}
 		}
-		
+
 		return result;
 	}
 
 	/**
-	 * 
+	 * 게시물 삭제
 	 */
 	@Override
-	public int boardDelete(Board board, Member loginMember) throws Exception{
+	public int boardDelete(Board board, Member loginMember) throws Exception {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("memberNo", loginMember.getMemberNo());
 		map.put("boardNo", board.getBoardNo());

@@ -1,6 +1,5 @@
 package edu.kh.project.common.interceptor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +66,7 @@ public class BoardTypeInterceptor implements HandlerInterceptor {
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 
-	// 후처리 : 요청이 처리된 후, 뷰가 렌더링 되기 전에 실행되는 메서드
+	// 후처리 : 요청이 처리된 후, 뷰가 렌2더링 되기 전에 실행되는 메서드
 	// 즉, 응답을 가지고 DispatcherServlet에게 돌아가기 전
 	// 전처리에서 모든 작업이 끝났기 때문에, 후처리에서 할게 없다.
 	@Override
