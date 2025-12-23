@@ -1,0 +1,65 @@
+2025-12-23 10:18:37.697  INFO 11220 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Starting BoardProjectApplication using Java 21.0.8 with PID 11220 (C:\250101~\my_workspace_250922~\06_Framework\boardProject\bin\main started by jaehu in C:\250101~\my_workspace_250922~\06_Framework\boardProject)
+2025-12-23 10:18:37.697 DEBUG 11220 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Running with Spring Boot v3.5.8, Spring v6.2.14
+2025-12-23 10:18:37.698  INFO 11220 --- [restartedMain] edu.kh.project.BoardProjectApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-12-23 10:18:38.176  INFO 11220 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 80 (http)
+2025-12-23 10:18:38.177  INFO 11220 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-23 10:18:38.177  INFO 11220 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-12-23 10:18:38.196  INFO 11220 --- [restartedMain] o.a.c.c.C.[Tomcat-3].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2025-12-23 10:18:38.196  INFO 11220 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 494 ms
+2025-12-23 10:18:38.217  INFO 11220 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2025-12-23 10:18:38.218  WARN 11220 --- [restartedMain] c.zaxxer.hikari.util.DriverDataSource    : Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+2025-12-23 10:18:38.310  INFO 11220 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection oracle.jdbc.driver.T4CConnection@14fe43fc
+2025-12-23 10:18:38.310  INFO 11220 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2025-12-23 10:18:38.643  INFO 11220 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-23 10:18:38.656  INFO 11220 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 80 (http) with context path '/'
+2025-12-23 10:18:38.661  INFO 11220 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Started BoardProjectApplication in 1.122 seconds (process running for 4405.857)
+2025-12-23 10:18:38.663  INFO 11220 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-12-23 10:18:40.549  INFO 11220 --- [RMI TCP Connection(149)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2025-12-23 10:18:40.550  INFO 11220 --- [RMI TCP Connection(149)-127.0.0.1] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-23 10:18:40.555  INFO 11220 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-12-23 10:18:40.557  INFO 11220 --- [RMI TCP Connection(149)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown initiated...
+2025-12-23 10:18:40.566  INFO 11220 --- [RMI TCP Connection(149)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown completed.
+2025-12-23 10:18:47.273  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Starting BoardProjectApplication using Java 21.0.8 with PID 24004 (C:\250101~\my_workspace_250922~\06_Framework\boardProject\bin\main started by jaehu in C:\250101~\my_workspace_250922~\06_Framework\boardProject)
+2025-12-23 10:18:47.274 DEBUG 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Running with Spring Boot v3.5.8, Spring v6.2.14
+2025-12-23 10:18:47.274  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-12-23 10:18:47.315  INFO 24004 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\jaehu\.gradle\caches\modules-2\files-2.1\com.oracle.database.jdbc\ojdbc11\23.7.0.25.01\665f52abef9122ce003b5cfc1d9d44f7302e2cfe\ojdbc11-23.7.0.25.01.jar referenced one or more files that do not exist: file:/C:/Users/jaehu/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc11/23.7.0.25.01/665f52abef9122ce003b5cfc1d9d44f7302e2cfe/oraclepki.jar
+2025-12-23 10:18:47.315  INFO 24004 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-12-23 10:18:47.315  INFO 24004 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-12-23 10:18:48.369  INFO 24004 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 80 (http)
+2025-12-23 10:18:48.382  INFO 24004 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-23 10:18:48.382  INFO 24004 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-12-23 10:18:48.435  INFO 24004 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-23 10:18:48.436  INFO 24004 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1120 ms
+2025-12-23 10:18:48.556  INFO 24004 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2025-12-23 10:18:48.561  WARN 24004 --- [restartedMain] c.zaxxer.hikari.util.DriverDataSource    : Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+2025-12-23 10:18:48.933  INFO 24004 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection oracle.jdbc.driver.T4CConnection@3cadfe45
+2025-12-23 10:18:48.934  INFO 24004 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2025-12-23 10:18:49.589  INFO 24004 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-23 10:18:49.635  INFO 24004 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 80 (http) with context path '/'
+2025-12-23 10:18:49.645  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Started BoardProjectApplication in 2.821 seconds (process running for 3.698)
+2025-12-23 10:19:42.922  INFO 24004 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-23 10:19:42.924  INFO 24004 --- [Thread-7] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-23 10:19:42.931  INFO 24004 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-12-23 10:19:42.934  INFO 24004 --- [Thread-7] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown initiated...
+2025-12-23 10:19:42.945  INFO 24004 --- [Thread-7] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown completed.
+2025-12-23 10:19:43.024  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Starting BoardProjectApplication using Java 21.0.8 with PID 24004 (C:\250101~\my_workspace_250922~\06_Framework\boardProject\bin\main started by jaehu in C:\250101~\my_workspace_250922~\06_Framework\boardProject)
+2025-12-23 10:19:43.024 DEBUG 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Running with Spring Boot v3.5.8, Spring v6.2.14
+2025-12-23 10:19:43.024  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-12-23 10:19:43.274  INFO 24004 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 80 (http)
+2025-12-23 10:19:43.275  INFO 24004 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-23 10:19:43.275  INFO 24004 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.49]
+2025-12-23 10:19:43.296  INFO 24004 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-23 10:19:43.296  INFO 24004 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 270 ms
+2025-12-23 10:19:43.315  INFO 24004 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2025-12-23 10:19:43.315  WARN 24004 --- [restartedMain] c.zaxxer.hikari.util.DriverDataSource    : Registered driver with driverClassName=oracle.jdbc.driver.OracleDriver was not found, trying direct instantiation.
+2025-12-23 10:19:43.402  INFO 24004 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection oracle.jdbc.driver.T4CConnection@1e76d23a
+2025-12-23 10:19:43.402  INFO 24004 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2025-12-23 10:19:43.579  INFO 24004 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-23 10:19:43.587  INFO 24004 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 80 (http) with context path '/'
+2025-12-23 10:19:43.590  INFO 24004 --- [restartedMain] edu.kh.project.BoardProjectApplication   : Started BoardProjectApplication in 0.595 seconds (process running for 57.643)
+2025-12-23 10:19:43.592  INFO 24004 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-12-23 10:20:19.354  INFO 24004 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-23 10:20:19.356  INFO 24004 --- [Thread-9] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-23 10:20:19.363  INFO 24004 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-12-23 10:20:19.366  INFO 24004 --- [Thread-9] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown initiated...
+2025-12-23 10:20:19.376  INFO 24004 --- [Thread-9] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown completed.
