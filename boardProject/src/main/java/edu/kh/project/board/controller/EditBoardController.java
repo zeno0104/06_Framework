@@ -164,7 +164,7 @@ public class EditBoardController {
 			@RequestParam(value = "cp", required = false, defaultValue = "1") int cp,
 			@SessionAttribute("loginMember") Member loginMember, RedirectAttributes ra) throws Exception {
 
-		// 1. 커맨드 객체(inputBoard)에 boardCoe, boardNo, memberNo를 세팅
+		// 1. 커맨드 객체(inputBoard)에 boardCode, boardNo, memberNo를 세팅
 		inputBoard.setBoardCode(boardCode);
 		inputBoard.setBoardNo(boardNo);
 		inputBoard.setMemberNo(loginMember.getMemberNo());
