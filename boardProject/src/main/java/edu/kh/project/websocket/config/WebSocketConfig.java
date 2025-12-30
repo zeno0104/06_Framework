@@ -1,5 +1,6 @@
 package edu.kh.project.websocket.config;
 
+import edu.kh.project.websocket.handler.ChattingWebsocketHandler;
 import edu.kh.project.websocket.handler.TestWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
 	private final TestWebSocketHandler testWebSocketHandler;
 	private final HandshakeInterceptor handshakeInterceptor;
+	private final ChattingWebsocketHandler chattingWebsocketHandler;
+
 	// 의존성 주입 : 같은 타입 or 상속관계의 타입,
 	// 즉 Bean으로 등록된 SessionHandshakeInterceptor가 의존성 주입됌
 
@@ -36,6 +39,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
 				// 클라이언트 연결 시 session을 가로채 핸들러에게 전달하는 handshakeInterceptor 등록
 				.setAllowedOriginPatterns("http://localhost/", "http://127.0.0.1/", "http://192.168.132.20")
 				// 웹소켓 요청이 허용되는 ip/도메인 지정
+				.withSockJS();
+		// ------------------------------------------
+		registry.addHandler(chattingWebsocketHandler, "/chattingSock").addInterceptors(handshakeInterceptor)
+				.setAllowedOriginPatterns("http://localhost/", "http://127.0.0.1/", "http://192.168.132.20")
 				.withSockJS();
 	}
 }
