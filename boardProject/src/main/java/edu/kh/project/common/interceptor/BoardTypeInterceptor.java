@@ -54,7 +54,8 @@ public class BoardTypeInterceptor implements HandlerInterceptor {
 		// - 서버 시작 ~ 종료 시 까지 유지되는 Servlet 내장 객체
 		// - 서버 내에 딱 한개만 존재하는 객체다 --> 모든 클라이언트가 공용으로 사용
 		// session은 클라이언트마다 생성됌
-
+		
+		
 		// application scope 객체 얻어오기
 		ServletContext application = request.getServletContext();
 		// application scope에 "boardTypeList"가 없을 경우

@@ -237,6 +237,7 @@ public class BoardController {
 				// : start=0
 			}
 		}
+		
 		return path;
 	}
 
