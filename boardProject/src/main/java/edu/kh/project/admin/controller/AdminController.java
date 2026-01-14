@@ -1,6 +1,9 @@
 package edu.kh.project.admin.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +18,7 @@ import edu.kh.project.admin.model.service.AdminService;
 import edu.kh.project.member.model.dto.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 
 @RestController
 @RequestMapping("admin")
@@ -47,10 +51,55 @@ public class AdminController {
 		try {
 			session.invalidate(); // 세션 무효화 처리
 			return ResponseEntity.status(HttpStatus.OK).body("로그아웃이 완료되었습니다.");
-			// .body 안에 들어가는 String이 ResponseEntity<String>와 같음
+			// body 안에 들어가는 String이 ResponseEntity<String>와 같음.
+			// 즉, return 해주는 값을 타입으로 넣어주면 됌
 		} catch (Exception e) {
 			// HttpStatus.INTERNAL_SERVER_ERROR : 500번 에러
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("로그아웃 중 예외 발생 : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 관리자 계정 발급
+	 * 
+	 * @param member
+	 * @return
+	 */
+	@PostMapping("createAdminAccount")
+	public ResponseEntity<String> createAdminAccount(@RequestBody Member member) {
+		try {
+			// 1. 기존에 있는 이메일인지 검사
+			int checkEmail = service.checkEmail(member.getMemberEmail());
+
+			// 2. 있으면 발급 안함
+			if (checkEmail > 0) {
+				// HttpStatus.CONFLICT(409) : 요청이 서버의 현재 상태와 충돌할 때 사용
+				// == 이미 존재하는 리소스(email) 때문에 새로운 리소스를 만들 수 없다.
+				return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용중인 이메일입니다.");
+			}
+			// 3. 없으면 새로 발급해서 return -> 비밀번호를
+			String accountPw = service.createAdminAccount(member);
+
+			// HttpStatus.OK(200) : 요청이 정상적으로 처리되었으나 기존 리소스에 대한 단순 처리
+			// HttpStatus.CREATED(201) : 자원이 성공적으로 생성되었음을 나타냄
+			return ResponseEntity.status(HttpStatus.CREATED).body(accountPw);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("관리자 계정 생성 중 문제 발생(서버 문의 바람)");
+		}
+	}
+
+	/**
+	 * 관리자 계정 목록 조회
+	 * 
+	 * @return
+	 */
+	@GetMapping("adminAccountList")
+	public ResponseEntity<List<Member>> adminAccountList() {
+		try {
+			List<Member> adminList = service.adminAccountList();
+			return ResponseEntity.status(HttpStatus.OK).body(adminList);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 }
