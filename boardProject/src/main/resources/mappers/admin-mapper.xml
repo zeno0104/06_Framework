@@ -40,4 +40,104 @@
 		WHERE AUTHORITY = 2 AND MEMBER_DEL_FL = 'N'
 	</select>
 
+	<!-- 최대 조회수 게시글 조회 만약 최대 조회수가 똑같은 게시물이 여러개 존재하면 가장 최근에 작성된 게시글 기준으로 정렬해서 
+		하나만 조회 -->
+	<select id="maxReadCount">
+		SELECT T.BOARD_NAME "boardName", B.BOARD_NO
+		"boardNo", B.BOARD_TITLE "boardTitle",
+		B.READ_COUNT "readCount",
+		M.MEMBER_NICKNAME "memberNickname"
+		FROM "BOARD" B
+		JOIN "MEMBER" M
+		ON
+		B.MEMBER_NO = M.MEMBER_NO
+		JOIN "BOARD_TYPE" T
+		ON B.BOARD_CODE =
+		T.BOARD_CODE
+		WHERE READ_COUNT = (SELECT MAX(READ_COUNT) FROM "BOARD")
+		ORDER BY BOARD_NO DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+
+	<select id="maxLikeCount" resultType="Board"> SELECT
+		T.BOARD_NAME
+		"boardName",
+		B.BOARD_NO "boardNo",
+		B.BOARD_TITLE "boardTitle",
+		B.READ_COUNT "readCount",
+		M.MEMBER_NICKNAME "memberNickname",
+		LC.LIKE_COUNT "likeCount"
+		FROM "BOARD" B
+		JOIN (
+		SELECT BOARD_NO, COUNT(*)
+		AS LIKE_COUNT
+		FROM "BOARD_LIKE"
+		GROUP BY BOARD_NO
+		ORDER BY LIKE_COUNT
+		DESC, BOARD_NO DESC
+		FETCH FIRST 1 ROWS ONLY
+		) LC ON B.BOARD_NO =
+		LC.BOARD_NO
+		JOIN "MEMBER" M ON B.MEMBER_NO = M.MEMBER_NO
+		JOIN
+		"BOARD_TYPE" T ON B.BOARD_CODE = T.BOARD_CODE
+	</select>
+
+	<!-- 탈퇴한 회원 조회 -->
+	<select id="selectWithdrawnMemberList">
+		SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_NICKNAME
+		FROM
+		MEMBER
+		WHERE MEMBER_DEL_FL = 'Y'
+		ORDER BY MEMBER_NO DESC
+	</select>
+	<update id="restoreMember">
+		UPDATE "MEMBER"
+		SET MEMBER_DEL_FL = 'N'
+		WHERE MEMBER_NO
+		= #{memberNo} AND MEMBER_DEL_FL = 'Y'
+	</update>
+	<!-- 삭제된 게시글 가져오기 -->
+	<select id="deletedBoard">
+		SELECT T.BOARD_NAME "boardName", B.BOARD_NO,
+		B.BOARD_TITLE, M.MEMBER_NICKNAME
+		FROM "BOARD" B
+		JOIN "BOARD_TYPE" T
+		ON
+		B.BOARD_CODE = T.BOARD_CODE
+		JOIN "MEMBER" M
+		ON B.MEMBER_NO = M.MEMBER_NO
+		WHERE B.BOARD_DEL_FL = 'Y'
+		ORDER BY B.BOARD_NO DESC
+	</select>
+	<update id="restoreBoard">
+		UPDATE BOARD
+		SET BOARD_DEL_FL = 'N'
+		WHERE BOARD_NO =
+		#{boardNo} AND BOARD_DEL_FL = 'Y'
+	</update>
+
+	<!-- 댓글 갯수 제일 많은 게시글 -->
+	<select id="maxCommentCount" resultType="Board">
+		SELECT * FROM (
+		SELECT
+		T.BOARD_NAME AS "boardName",
+		B.BOARD_NO AS "boardNo",
+		B.BOARD_TITLE AS "boardTitle",
+		B.READ_COUNT AS "readCount",
+		M.MEMBER_NICKNAME AS "memberNickname",
+		COUNT(C.COMMENT_NO) AS "commentCount" FROM "BOARD" B
+		JOIN "MEMBER" M ON B.MEMBER_NO = M.MEMBER_NO
+		JOIN "BOARD_TYPE" T ON B.BOARD_CODE = T.BOARD_CODE
+		LEFT JOIN "COMMENT" C ON B.BOARD_NO = C.BOARD_NO
+		GROUP BY
+		T.BOARD_NAME,
+		B.BOARD_NO,
+		B.BOARD_TITLE,
+		B.READ_COUNT,
+		M.MEMBER_NICKNAME
+		ORDER BY "commentCount" DESC, B.BOARD_NO DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
 </mapper>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.kh.project.admin.model.mapper.AdminMapper;
+import edu.kh.project.board.model.dto.Board;
 import edu.kh.project.common.util.Utility;
 import edu.kh.project.member.model.dto.Member;
 import lombok.RequiredArgsConstructor;
@@ -72,5 +73,46 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Member> adminAccountList() {
 		return mapper.adminAccountList();
+	}
+
+	@Override
+	public Board maxReadCount() {
+		return mapper.maxReadCount();
+	}
+
+	@Override
+	public Board maxLikeCount() {
+		return mapper.maxLikeCount();
+	}
+
+	@Override
+	public List<Member> selectWithdrawnMemberList() {
+		return mapper.selectWithdrawnMemberList();
+	}
+
+	@Override
+	public int restoreMember(int memberNo) {
+		return mapper.restoreMember(memberNo);
+	}
+
+	@Override
+	public List<Board> deletedBoard() {
+		return mapper.deletedBoard();
+	}
+
+	/**
+	 * 삭제 게시글 복구
+	 */
+	@Override
+	public int restoreBoard(int boardNo) {
+		return mapper.restoreBoard(boardNo);
+	}
+
+	/**
+	 * 댓글 갯수 가장 많은 게시글
+	 */
+	@Override
+	public Board maxCommentCount() {
+		return mapper.maxCommentCount();
 	}
 }

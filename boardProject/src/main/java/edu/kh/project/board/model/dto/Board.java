@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class Board {
 	// BOARD 테이블 컬럼
 	private int boardNo;
+
 	private String boardTitle;
 	private String boardContent;
 	private String boardWriteDate;
@@ -32,19 +33,23 @@ public class Board {
 	private int likeCount; // 좋아요 수
 	// 추후에 작성자 옆에 프로필 사진 넣고 싶으면 추가하면 됌
 	// 제목 옆에 썸네일 넣고 싶다면 썸네일 추가하면 됌
-	
+
 	// 게시글 작성자 프로필 이미지
 	private String profileImg;
-	
+
 	// 게시글 목록 썸네일 이미지
 	private String thumbnail;
-	
+
 	// 게시글 좋아요 여부 확인
 	private int likeCheck; // 눌렀다면 1, 아니라면 0
-	
+
 	// 게시글에 등록된 이미지 목록
 	private List<BoardImg> imageList;
-	
+
 	// 게시글에 등록된 댓글 목록
 	private List<Comment> commentList;
+
+	// ----- react 관리자 페이지 필요-----
+	// 게시판 종류명
+	private String boardName;
 }
